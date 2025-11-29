@@ -7,30 +7,46 @@ const aspectRatio = window.innerWidth / window.innerHeight;
 if (aspectRatio > 2) { zoom_intro = 2.8; center_intro = [-82.67, -18.86]; }
 else {
   if (window.innerWidth < 1024) { 
-    zoom_intro = 2.8; center_intro = [-82.67, -18.86]; 
+    zoom_intro = 3; center_intro = [-70, 0.86]; 
   }
   else if (window.innerWidth < 1400) { 
-    zoom_intro = 2.8; center_intro = [-82.67, -18.86]; 
+    zoom_intro = 3; center_intro = [-70, 0.86]; 
   }
   else if (window.innerWidth < 1600) {
-    zoom_intro = 3.2; center_intro = [-82.67, -18.86]; 
+    zoom_intro = 3; center_intro = [-70, 0.86]; 
   }
   else { 
-    zoom_intro = 3.1; center_intro = [-82.67, -18.86];
+    zoom_intro = 3; center_intro = [-70, 0.86];
   }
 }
 
 const isMobile = window.matchMedia("(max-width: 1024px)").matches;
-let bearing_intro = isMobile ? 0 : 90;
+let bearing_intro = isMobile ? 0 : -120;
 
+
+// ---------- MAPA AMERICAS ----------
 const map = new mapboxgl.Map({
   container: 'map_zoomout',
-  style: 'mapbox://styles/saralgc/cmfqzh15g00ik01s6a0k69cyg',
+//  style: 'mapbox://styles/saralgc/cmfqzh15g00ik01s6a0k69cyg',
+  style: 'mapbox://styles/saralgc/cmi1u5bs200dp01s989x31tcb',
   center: center_intro,
   zoom: zoom_intro,
+  minzoom: 2,
   bearing: bearing_intro,
   interactive: true
 });
+
+// ---------- MAPA ESPANHA ----------
+const mapSpain = new mapboxgl.Map({
+  container: 'map_spain',
+  style: 'mapbox://styles/saralgc/cmiipzrnu00vu01s64ezz7ytx',
+  center: [-2.8, 41],
+  zoom: 3,
+  bearing: bearing_intro,
+  interactive: false
+});
+
+
 
 // ____________________________ PARSE SRT ____________________________
 function parseSRT(data) {
@@ -76,26 +92,50 @@ $(document).ready(() => {
       }))
     };
 
+    // Adiciona a layer espanha ao mapa
+          mapSpain.on("load", () => {
+            mapSpain.addSource("jsonData", {
+                type: "geojson",
+                data: geojson
+            });
+            mapSpain.addLayer({
+                id: "miniLayer",
+                type: "circle",
+                source: "jsonData",
+                paint: {
+                    "circle-radius": [
+                      "coalesce",
+                      ["feature-state", "radius"],
+                      8
+                    ],
+                    "circle-color": "#ffe723",
+                    "circle-stroke-color": "#0c5494",
+                    "circle-stroke-width": 2.5,
+                    "circle-opacity": 1
+                }
+            });
+        });
+
     map.on("load", async () => {
-      // Adiciona a layer ao mapa
+      // Adiciona a layer americas ao mapa
       map.addLayer({
         id: "jsonData",
         type: "circle",
         source: { type: "geojson", data: geojson },
         paint: {
           "circle-radius": [
-            "case",
-            ["boolean", ["feature-state", "active"], false],
-            ["coalesce", ["feature-state", "radius"], 20],
-            7 ],
+            "coalesce",
+            ["feature-state", "radius"],
+            8
+          ],
           "circle-color": [
                 "case",
                 ["boolean", ["feature-state", "activePopup"], false],
                 "#000000",          // preto quando popup ativo
-                "#ff69b4"           // cor padrão
+                "#ffe723"           // cor padrão
           ],
-          "circle-stroke-color": "#fff",
-          "circle-stroke-width": 1.5,
+          "circle-stroke-color": "#0c5494",
+          "circle-stroke-width": 2.5,
           "circle-opacity": 1
         }
       });
@@ -240,6 +280,7 @@ $(document).ready(() => {
             : baseRadius;
 
           map.setFeatureState({ source: "jsonData", id: f.id }, { active, radius });
+
         });
 
         rafId = requestAnimationFrame(updateMarkers);
@@ -262,5 +303,7 @@ $(document).ready(() => {
         });
       });
     });
+
   }
 });
+

@@ -41,7 +41,7 @@ function updateUI(){
 function updateSeekTrack(){
   const pct = seek.value;
   // usa gradient para simular progresso (funciona bem em WebKit browsers)
-  seek.style.background = `linear-gradient(90deg, ${getComputedStyle(document.documentElement).getPropertyValue('--hotpink').trim()} ${pct}%, rgba(255,105,180,0.18) ${pct}%)`;
+  seek.style.background = `linear-gradient(90deg, ${getComputedStyle(document.documentElement).getPropertyValue('--hotpink').trim()} ${pct}%, ${getComputedStyle(document.documentElement).getPropertyValue('--yellow').trim()} ${pct}%)`;
 }
 
 // controle play/pause

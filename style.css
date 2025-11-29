@@ -1,8 +1,8 @@
  
 :root {
-  --hotpink: #ff69b4;
-  --hotpink-weak: rgba(255,105,180,0.18);
-}
+  --hotpink: #0c5494;
+  --hotpink-weak: #ffe723;
+  --yellow: #ffe723;
  
  body, html {
     margin: 0;
@@ -10,7 +10,7 @@
     height: 100%;
     overflow: hidden;
     font-family: monospace;
-    background: white;
+    background: #ffb4d6;
     color: var(--hotpink-weak);
   }
 
@@ -64,6 +64,18 @@
 
     #map.active {
       pointer-events: auto;
+    }
+
+    #map_spain {
+      position: fixed;
+      width: 200px;
+      height: 200px;
+      bottom: 200px;
+      right: 150px;
+      border: 2px dotted #fff;
+      border-radius: 8px;
+      z-index: 9999;
+      overflow: hidden;
     }
 
       /* Hide mobile toggles on desktop */
@@ -1254,7 +1266,7 @@ a.mapboxgl-ctrl-logo{
   appearance: none;
   width: 100px;
   height: 6px;
-  background: var(--hotpink-weak);
+  background: var(--hotpink);
   border-radius: 6px;
   cursor: pointer;
 }
@@ -1298,7 +1310,7 @@ a.mapboxgl-ctrl-logo{
 .btn:focus,
 .seek:focus,
 .volume:focus {
-  box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.12);
+  box-shadow: 0 0 0 3px lightblue;
   outline: none;
 }
 
@@ -1319,12 +1331,12 @@ a.mapboxgl-ctrl-logo{
   left: 0;
   width: 100%;
   text-align: center;
-  font-size: 40px;
+  font-size: 30px;
   font-weight: 800;
   line-height: 5vh;
   color: var(--hotpink);
-  -webkit-text-stroke: 1.2px white; /* espessura e cor da borda */
-  text-shadow: 0 0 8px rgba(255,105,180,0.1);
+  -webkit-text-stroke: 0.8px white; /* espessura e cor da borda */
+  text-shadow: 0 0 2px lightblue;
   pointer-events: none;
   z-index:1000;
   white-space: pre-line;
